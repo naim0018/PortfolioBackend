@@ -1,12 +1,17 @@
 import { Router } from 'express'
 import { AuthRoute } from '../../modules/Auth/auth.route'
+import { PortfolioRoutes } from '../../modules/Portfolio/portfolio.route'
 
 const router = Router()
 
 const moduleRoute = [
   {
-    path: '/',
+    path: '/auth',
     route: AuthRoute,
+  },
+  {
+    path: '/portfolio',
+    route: PortfolioRoutes,
   },
 ]
 
