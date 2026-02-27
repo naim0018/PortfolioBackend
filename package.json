@@ -10,7 +10,9 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "format": "prettier --write src/**/*.ts"
+    "format": "prettier --write src/**/*.ts",
+    "check-types": "tsc --noEmit",
+    "validate": "npm run lint && npm run check-types"
   },
   "author": "",
   "license": "ISC",
