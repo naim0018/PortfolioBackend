@@ -4,23 +4,23 @@ const socialLinksValidationSchema = z.object({
   logo: z.string(),
   name: z.string(),
   description: z.string(),
-  link: z.string().url(),
+  link: z.string().optional(),
 })
 
 const projectsValidationSchema = z.object({
   title: z.string(),
   description: z.string(),
-  coverImage: z.string().url(),
-  images: z.array(z.string().url()),
-  link: z.string().url(),
-  tags: z.array(z.string()),
-  repositoryLink: z.string().url(),
-  notes: z.string(),
+  coverImage: z.string().optional(),
+  images: z.array(z.string()).optional().default([]),
+  link: z.string().optional(),
+  tags: z.array(z.string()).optional().default([]),
+  repositoryLink: z.string().optional(),
+  notes: z.string().optional(),
 })
 
 const skillsValidationSchema = z.object({
   name: z.string(),
-  logo: z.string().url(),
+  logo: z.string(),
   progress: z.number().min(0).max(100),
   category: z.string(),
 })
@@ -28,10 +28,10 @@ const skillsValidationSchema = z.object({
 const experienceValidationSchema = z.object({
   title: z.string(),
   description: z.string(),
-  logo: z.string().url(),
-  link: z.string().url(),
+  logo: z.string(),
+  link: z.string().optional(),
   startDate: z.string(),
-  endDate: z.string(),
+  endDate: z.string().optional(),
   location: z.string(),
 })
 
@@ -39,23 +39,16 @@ const educationValidationSchema = z.object({
   title: z.string(),
   degree: z.string(),
   description: z.string(),
-  logo: z.string().url(),
-  link: z.string().url(),
+  logo: z.string(),
+  link: z.string().optional(),
   startDate: z.string(),
-  endDate: z.string(),
+  endDate: z.string().optional(),
   location: z.string(),
 })
 
 const createPortfolioValidationSchema = z.object({
   body: z.object({
-    name: z.string(),
-    email: z.string().email(),
-    password: z.string().min(6),
-    role: z.enum(['admin', 'user']).optional(),
-    shortDescription: z.string(),
-    longDescription: z.string(),
-    profilePicture: z.string().url(),
-    resume: z.string().url(),
+    userId: z.string(),
     socialLinks: z.array(socialLinksValidationSchema).optional(),
     projects: z.array(projectsValidationSchema).optional(),
     skills: z.array(skillsValidationSchema).optional(),
@@ -66,12 +59,6 @@ const createPortfolioValidationSchema = z.object({
 
 const updatePortfolioValidationSchema = z.object({
   body: z.object({
-    name: z.string().optional(),
-    email: z.string().email().optional(),
-    shortDescription: z.string().optional(),
-    longDescription: z.string().optional(),
-    profilePicture: z.string().url().optional(),
-    resume: z.string().url().optional(),
     socialLinks: z.array(socialLinksValidationSchema).optional(),
     projects: z.array(projectsValidationSchema).optional(),
     skills: z.array(skillsValidationSchema).optional(),

@@ -1,12 +1,8 @@
-export interface User {
-  name: string
-  email: string
-  password: string
-  role: string
-  shortDescription: string
-  longDescription: string
-  profilePicture: string
-  resume: string
+import { Types } from 'mongoose'
+
+export interface IPortfolio {
+  userId: Types.ObjectId
+  status: 'draft' | 'published'
   socialLinks: SocialLinks[]
   projects: Projects[]
   skills: Skills[]
@@ -18,18 +14,18 @@ export interface SocialLinks {
   logo: string
   name: string
   description: string
-  link: string
+  link?: string
 }
 
 export interface Projects {
   title: string
   description: string
-  coverImage: string
+  coverImage?: string
   images: string[]
-  link: string
+  link?: string
   tags: string[]
-  repositoryLink: string
-  notes: string
+  repositoryLink?: string
+  notes?: string
 }
 
 export interface Skills {
@@ -43,9 +39,9 @@ export interface Experience {
   title: string
   description: string
   logo: string
-  link: string
+  link?: string
   startDate: string
-  endDate: string
+  endDate?: string
   location: string
 }
 
@@ -54,8 +50,8 @@ export interface Education {
   degree: string
   description: string
   logo: string
-  link: string
+  link?: string
   startDate: string
-  endDate: string
+  endDate?: string
   location: string
 }

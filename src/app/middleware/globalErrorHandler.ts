@@ -9,13 +9,18 @@ import handleDuplicateError from '../error/handleDuplicateError'
 import AppError from '../error/AppError'
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-  //setting default values
+  // console logging in development
+  if (config.NODE_ENV === 'development') {
+    console.error('API Error: ', err)
+  }
+
+  // Setting default values
   let statusCode = 500
-  let message = 'Something went wrong!'
+  let message = err.message || 'Something went wrong!'
   let errorSources: TErrorSources = [
     {
       path: '',
-      message: 'Something went wrong',
+      message: err.message || 'Something went wrong',
     },
   ]
 
@@ -56,14 +61,23 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, _next) => {
         message: err?.message,
       },
     ]
+  } else if (typeof err === 'string') {
+    message = err
+    errorSources = [
+      {
+        path: '',
+        message: err,
+      },
+    ]
   }
 
-  //ultimate return
+  // Final return
   return res.status(statusCode).json({
     success: false,
     message,
     errorSources,
-    err,
+    // Sending full error in development for better debugging
+    err: config.NODE_ENV === 'development' ? err : undefined,
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
   })
 }

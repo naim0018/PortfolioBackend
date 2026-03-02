@@ -1,7 +1,9 @@
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
-type TJwtPayload = {
-  userId: string
+export type TJwtPayload = {
+  id: string
   role: string
+  email: string
+  userName: string
 }
 export const createToken = (
   jwtPayload: TJwtPayload,

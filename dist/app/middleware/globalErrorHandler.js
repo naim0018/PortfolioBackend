@@ -11,14 +11,17 @@ const handleCastError_1 = __importDefault(require("../error/handleCastError"));
 const handleDuplicateError_1 = __importDefault(require("../error/handleDuplicateError"));
 const AppError_1 = __importDefault(require("../error/AppError"));
 const globalErrorHandler = (err, req, res, _next) => {
-    console.log(err.statusCode);
-    //setting default values
+    // console logging in development
+    if (config_1.default.NODE_ENV === 'development') {
+        console.error('API Error: ', err);
+    }
+    // Setting default values
     let statusCode = 500;
-    let message = 'Something went wrong!';
+    let message = err.message || 'Something went wrong!';
     let errorSources = [
         {
             path: '',
-            message: 'Something went wrong',
+            message: err.message || 'Something went wrong',
         },
     ];
     if (err instanceof zod_1.ZodError) {
@@ -64,12 +67,22 @@ const globalErrorHandler = (err, req, res, _next) => {
             },
         ];
     }
-    //ultimate return
+    else if (typeof err === 'string') {
+        message = err;
+        errorSources = [
+            {
+                path: '',
+                message: err,
+            },
+        ];
+    }
+    // Final return
     return res.status(statusCode).json({
         success: false,
         message,
         errorSources,
-        err,
+        // Sending full error in development for better debugging
+        err: config_1.default.NODE_ENV === 'development' ? err : undefined,
         stack: config_1.default.NODE_ENV === 'development' ? err?.stack : null,
     });
 };

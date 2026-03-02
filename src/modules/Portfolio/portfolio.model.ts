@@ -2,28 +2,28 @@ import { model, Schema } from 'mongoose'
 import {
   Education,
   Experience,
+  IPortfolio,
   Projects,
   Skills,
   SocialLinks,
-  User,
 } from './portfolio.interface'
 
 const socialLinksSchema = new Schema<SocialLinks>({
   logo: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
-  link: { type: String, required: true },
+  link: { type: String, required: false },
 })
 
 const projectsSchema = new Schema<Projects>({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  coverImage: { type: String, required: true },
+  coverImage: { type: String, required: false },
   images: { type: [String], required: true },
-  link: { type: String, required: true },
+  link: { type: String, required: false },
   tags: { type: [String], required: true },
-  repositoryLink: { type: String, required: true },
-  notes: { type: String, required: true },
+  repositoryLink: { type: String, required: false },
+  notes: { type: String, required: false },
 })
 
 const skillsSchema = new Schema<Skills>({
@@ -37,9 +37,9 @@ const experienceSchema = new Schema<Experience>({
   title: { type: String, required: true },
   description: { type: String, required: true },
   logo: { type: String, required: true },
-  link: { type: String, required: true },
+  link: { type: String, required: false },
   startDate: { type: String, required: true },
-  endDate: { type: String, required: true },
+  endDate: { type: String, required: false },
   location: { type: String, required: true },
 })
 
@@ -48,22 +48,20 @@ const educationSchema = new Schema<Education>({
   degree: { type: String, required: true },
   description: { type: String, required: true },
   logo: { type: String, required: true },
-  link: { type: String, required: true },
+  link: { type: String, required: false },
   startDate: { type: String, required: true },
-  endDate: { type: String, required: true },
+  endDate: { type: String, required: false },
   location: { type: String, required: true },
 })
 
-const userSchema = new Schema<User>(
+const portfolioSchema = new Schema<IPortfolio>(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: 0 },
-    role: { type: String, enum: ['admin', 'user'], default: 'user' },
-    shortDescription: { type: String, required: true },
-    longDescription: { type: String, required: true },
-    profilePicture: { type: String, required: true },
-    resume: { type: String, required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    status: {
+      type: String,
+      enum: ['draft', 'published'],
+      default: 'published',
+    },
     socialLinks: { type: [socialLinksSchema], default: [] },
     projects: { type: [projectsSchema], default: [] },
     skills: { type: [skillsSchema], default: [] },
@@ -75,4 +73,4 @@ const userSchema = new Schema<User>(
   },
 )
 
-export const PortfolioModel = model<User>('Portfolio', userSchema)
+export const PortfolioModel = model<IPortfolio>('Portfolio', portfolioSchema)
